@@ -11,7 +11,7 @@ use super::angle::Angle;
 /// # Examples
 /// 
 /// ```
-/// use rusticle::{Complex, Angle};
+/// use rusticle::complex::{Complex, Angle};
 /// 
 /// // Create a complex number in Cartesian form
 /// let z1 = Complex::new(3.0, 4.0);
@@ -56,7 +56,7 @@ impl Complex {
     /// # Examples
     /// 
     /// ```
-    /// use rusticle::Complex;
+    /// use rusticle::complex::Complex;
     /// 
     /// let z = Complex::new(3.0, 4.0);
     /// assert_eq!(z.real, 3.0);
@@ -71,7 +71,7 @@ impl Complex {
     /// # Examples
     /// 
     /// ```
-    /// use rusticle::{Complex, Angle};
+    /// use rusticle::complex::{Complex, Angle};
     /// use std::f64::consts::PI;
     /// 
     /// let z = Complex::from_polar(2.0, Angle::from_radians(PI / 4.0));
@@ -93,7 +93,7 @@ impl Complex {
     /// # Examples
     /// 
     /// ```
-    /// use rusticle::Complex;
+    /// use rusticle::complex::Complex;
     /// 
     /// let z = Complex::new(3.0, 4.0);
     /// assert_eq!(z.magnitude(), 5.0);
@@ -110,7 +110,7 @@ impl Complex {
     /// # Examples
     /// 
     /// ```
-    /// use rusticle::Complex;
+    /// use rusticle::complex::Complex;
     /// use std::f64::consts::PI;
     /// 
     /// let z = Complex::new(0.0, 1.0);
@@ -125,7 +125,7 @@ impl Complex {
     /// # Examples
     /// 
     /// ```
-    /// use rusticle::{Complex, Angle};
+    /// use rusticle::complex::{Complex, Angle};
     /// 
     /// let z = Complex::new(0.0, 1.0);
     /// assert_eq!(z.angle().to_degrees(), 90.0);
@@ -141,7 +141,7 @@ impl Complex {
     /// # Examples
     /// 
     /// ```
-    /// use rusticle::Complex;
+    /// use rusticle::complex::Complex;
     /// 
     /// let z = Complex::new(3.0, 4.0);
     /// let conjugate = z.conjugate();
@@ -163,7 +163,7 @@ impl Complex {
     /// # Examples  
     /// 
     /// ```
-    /// use rusticle::Complex;
+    /// use rusticle::complex::Complex;
     /// 
     /// let z = Complex::new(3.0, 4.0);
     /// assert_eq!(z.magnitude_squared(), 25.0);
@@ -171,7 +171,6 @@ impl Complex {
     pub fn magnitude_squared(&self) -> f64 {
         self.real * self.real + self.imag * self.imag
     }
-
 }
 
 // Implement standard arithmetic operations
