@@ -1,3 +1,5 @@
+//! Complex numbers and their operations
+
 use std::ops::{Add, Sub, Mul, Div, Neg};
 use std::fmt;
 use super::angle::Angle;

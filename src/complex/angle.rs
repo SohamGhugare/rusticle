@@ -1,3 +1,5 @@
+//! Angle operations and conversions
+
 use std::f64::consts::PI;
 
 /// Represents an angle measurement that can be expressed in either degrees or radians.

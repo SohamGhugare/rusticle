@@ -1,3 +1,5 @@
+//! Complex vectors and their operations
+
 use std::ops::{Add, Sub, Mul, Neg};
 use std::fmt;
 use super::complex::Complex;
