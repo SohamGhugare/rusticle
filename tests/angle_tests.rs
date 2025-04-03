@@ -1,5 +1,5 @@
 use std::f64::consts::PI;
-use rusticle::Angle;
+use rusticle::complex::Angle;
 
 /// Test suite for the Angle type.
 mod angle_tests {

@@ -7,6 +7,5 @@
 pub mod angle;
 pub mod complex;
 
-// Re-export the Angle and Complex types for convenience
 pub use angle::Angle;
 pub use complex::Complex;

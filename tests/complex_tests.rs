@@ -1,4 +1,5 @@
-use rusticle::{Complex, Angle};
+use rusticle::Angle;
+use rusticle::complex::Complex;
 
 /// Test suite for the Complex type.
 /// 

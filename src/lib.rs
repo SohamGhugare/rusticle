@@ -6,5 +6,4 @@
 
 pub mod complex;
 
-// Re-export commonly used types
-pub use complex::{Angle, Complex};
+pub use complex::Angle;
