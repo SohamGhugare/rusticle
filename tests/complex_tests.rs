@@ -72,7 +72,29 @@ mod complex_tests {
         // Argument
         let arg = z.argument();
         assert!((arg - 0.927295218).abs() < 1e-6);
-        
     }
-
+    
+    /// Tests the Debug trait implementation for Complex.
+    #[test]
+    fn test_complex_debug() {
+        // Test positive imaginary part
+        let z1 = Complex::new(3.0, 4.0);
+        assert_eq!(format!("{:?}", z1), "3+4i");
+        
+        // Test negative imaginary part
+        let z2 = Complex::new(3.0, -4.0);
+        assert_eq!(format!("{:?}", z2), "3-4i");
+        
+        // Test zero imaginary part
+        let z3 = Complex::new(3.0, 0.0);
+        assert_eq!(format!("{:?}", z3), "3");
+        
+        // Test zero real part
+        let z4 = Complex::new(0.0, 4.0);
+        assert_eq!(format!("{:?}", z4), "0+4i");
+        
+        // Test both parts zero
+        let z5 = Complex::new(0.0, 0.0);
+        assert_eq!(format!("{:?}", z5), "0");
+    }
 } 

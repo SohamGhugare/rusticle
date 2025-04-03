@@ -1,4 +1,5 @@
 use std::ops::{Add, Sub, Mul, Div, Neg};
+use std::fmt;
 use super::angle::Angle;
 
 /// A complex number represented as a + bi
@@ -27,12 +28,26 @@ use super::angle::Angle;
 /// let conjugate = z1.conjugate();
 /// let argument = z1.argument();
 /// ```
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct Complex {
     /// The real part of the complex number
     pub real: f64,
     /// The imaginary part of the complex number
     pub imag: f64,
+}
+
+/// Custom Debug implementation for Complex to print in the format a+ib
+impl fmt::Debug for Complex {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if self.imag == 0.0 {
+            // If imaginary part is zero, just print the real part
+            write!(f, "{}", self.real)
+        } else {
+            // Format: a+ib or a-ib
+            let sign = if self.imag >= 0.0 { "+" } else { "" };
+            write!(f, "{}{}{}i", self.real, sign, self.imag)
+        }
+    }
 }
 
 impl Complex {
