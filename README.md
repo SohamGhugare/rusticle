@@ -25,7 +25,7 @@ Comprehensive support for complex arithmetic, mathematical functions, and polar 
 ### Example
 
 ```rust
-use rusticle::Complex;
+use rusticle::complex::Complex;
 
 // Create complex numbers
 let z1 = Complex::new(3.0, 4.0);
@@ -39,6 +39,28 @@ let product = z1 * z2;
 let magnitude = z1.magnitude();
 let argument = z1.argument();
 let conjugate = z1.conjugate();
+```
+
+### Complex Vectors
+Powerful vector operations for complex numbers, including inner products, norms, and normalization
+
+```rust
+use rusticle::complex::{Complex, ComplexVector};
+
+// Create complex vectors
+let v1 = ComplexVector::new(vec![Complex::new(1.0, 2.0), Complex::new(3.0, 4.0)]);
+let v2 = ComplexVector::new(vec![Complex::new(5.0, 6.0), Complex::new(7.0, 8.0)]);
+
+// Vector operations
+let sum = v1.clone() + v2.clone();
+let scaled = v1.clone() * 2.0;
+
+// Inner product and norm
+let inner_prod = v1.inner_product(&v2);
+let norm = v1.norm();
+
+// Normalize a vector
+let normalized = v1.normalize();
 ```
 
 ## License
