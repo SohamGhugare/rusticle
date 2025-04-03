@@ -154,9 +154,7 @@ impl ComplexVector {
     /// assert_eq!(inner_prod.imag, 8.0);
     /// ```
     pub fn inner_product(&self, other: &ComplexVector) -> Complex {
-        if self.dimension() != other.dimension() {
-            panic!("Vectors must have the same dimension for inner product");
-        }
+        assert_eq!(self.dimension(), other.dimension(), "Vectors must have the same dimension for inner product");
         
         let mut result = Complex::new(0.0, 0.0);
         for i in 0..self.dimension() {
@@ -180,9 +178,7 @@ impl ComplexVector {
     /// ```
     pub fn normalize(&self) -> Self {
         let norm = self.norm();
-        if norm == 0.0 {
-            panic!("Cannot normalize a zero vector");
-        }
+        assert!(norm != 0.0, "Cannot normalize a zero vector");
         
         let mut normalized = self.clone();
         for i in 0..self.dimension() {
@@ -211,9 +207,7 @@ impl Add for ComplexVector {
     type Output = ComplexVector;
     
     fn add(self, other: ComplexVector) -> ComplexVector {
-        if self.dimension() != other.dimension() {
-            panic!("Vectors must have the same dimension for addition");
-        }
+        assert_eq!(self.dimension(), other.dimension(), "Vectors must have the same dimension for addition");
         
         let mut result = Vec::with_capacity(self.dimension());
         for i in 0..self.dimension() {
@@ -228,9 +222,7 @@ impl Sub for ComplexVector {
     type Output = ComplexVector;
     
     fn sub(self, other: ComplexVector) -> ComplexVector {
-        if self.dimension() != other.dimension() {
-            panic!("Vectors must have the same dimension for subtraction");
-        }
+        assert_eq!(self.dimension(), other.dimension(), "Vectors must have the same dimension for subtraction");
         
         let mut result = Vec::with_capacity(self.dimension());
         for i in 0..self.dimension() {
