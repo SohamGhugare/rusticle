@@ -1,18 +1,26 @@
 <h1 align="center">Rusticle</h1>
 <p align="center">High-performance Rust library for numerical computing, built with power and simplicity.</p>
 
-## Features
+## Installation
 
-- **Complex Numbers**: Comprehensive support for complex arithmetic, mathematical functions, and polar form conversions
+Run this in your terminal
+```bash
+cargo add rusticle
+```
 
-## Usage
-
-Add this to your `Cargo.toml`:
+OR add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
 rusticle = "0.1.0"
 ```
+
+
+## Features
+
+### Complex Numbers
+Comprehensive support for complex arithmetic, mathematical functions, and polar form conversions
+
 
 ### Example
 
