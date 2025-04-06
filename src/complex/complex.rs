@@ -38,6 +38,12 @@ pub struct Complex {
     pub imag: f64,
 }
 
+impl Default for Complex {
+    fn default() -> Self {
+        Complex::new(0.0, 0.0)
+    }
+}
+
 /// Custom Debug implementation for Complex to print in the format a+ib
 impl fmt::Debug for Complex {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
