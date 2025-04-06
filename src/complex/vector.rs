@@ -3,6 +3,7 @@
 use std::ops::{Add, Sub, Mul, Neg};
 use std::fmt;
 use super::complex::Complex;
+use crate::linalg::matrix::Matrix;
 
 /// A vector of complex numbers
 /// 
@@ -187,6 +188,86 @@ impl ComplexVector {
             normalized.components[i] = normalized.components[i] / norm;
         }
         normalized
+    }
+
+    /// Converts a vector to a column matrix
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::complex::{Complex, ComplexVector};
+    /// use rusticle::linalg::Matrix;
+    /// 
+    /// let v = ComplexVector::new(vec![Complex::new(1.0, 2.0), Complex::new(3.0, 4.0)]);
+    /// let matrix = v.to_matrix();
+    /// assert_eq!(matrix.rows(), 2);
+    /// assert_eq!(matrix.cols(), 1);
+    /// assert_eq!(matrix.get(0, 0), &Complex::new(1.0, 2.0));
+    /// assert_eq!(matrix.get(1, 0), &Complex::new(3.0, 4.0));
+    /// ```
+    pub fn to_matrix(&self) -> Matrix<Complex> {
+        Matrix::new(self.dimension(), 1, self.components.clone())
+    }
+
+    /// Creates a vector from a column matrix
+    /// 
+    /// # Panics
+    /// 
+    /// Panics if the matrix has more than one column
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::complex::{Complex, ComplexVector};
+    /// use rusticle::linalg::Matrix;
+    /// 
+    /// let matrix = Matrix::new(2, 1, vec![Complex::new(1.0, 2.0), Complex::new(3.0, 4.0)]);
+    /// let v = ComplexVector::from_matrix(&matrix);
+    /// assert_eq!(v.dimension(), 2);
+    /// assert_eq!(v.components[0], Complex::new(1.0, 2.0));
+    /// assert_eq!(v.components[1], Complex::new(3.0, 4.0));
+    /// ```
+    pub fn from_matrix(matrix: &Matrix<Complex>) -> Self {
+        assert_eq!(matrix.cols(), 1, "Matrix must have exactly one column");
+        let mut components = Vec::with_capacity(matrix.rows());
+        for i in 0..matrix.rows() {
+            components.push(*matrix.get(i, 0));
+        }
+        ComplexVector::new(components)
+    }
+
+    /// Multiplies this vector by a matrix
+    /// 
+    /// # Panics
+    /// 
+    /// Panics if the vector dimension does not match the number of matrix columns
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::complex::{Complex, ComplexVector};
+    /// use rusticle::linalg::Matrix;
+    /// 
+    /// let v = ComplexVector::new(vec![Complex::new(1.0, 0.0), Complex::new(0.0, 1.0)]);
+    /// let m = Matrix::new(2, 2, vec![
+    ///     Complex::new(1.0, 0.0), Complex::new(0.0, 1.0),
+    ///     Complex::new(0.0, 1.0), Complex::new(1.0, 0.0)
+    /// ]);
+    /// 
+    /// let result = v.mul_matrix(&m);
+    /// assert_eq!(result.dimension(), 2);
+    /// assert_eq!(result.components[0], Complex::new(0.0, 0.0));
+    /// assert_eq!(result.components[1], Complex::new(0.0, 2.0));
+    /// ```
+    pub fn mul_matrix(&self, matrix: &Matrix<Complex>) -> Self {
+        assert_eq!(self.dimension(), matrix.cols(), "Vector dimension must match matrix columns");
+        
+        let mut result = ComplexVector::zeros(matrix.rows());
+        for i in 0..matrix.rows() {
+            let mut sum = Complex::new(0.0, 0.0);
+            for j in 0..matrix.cols() {
+                sum = sum + self.components[j] * *matrix.get(i, j);
+            }
+            result.components[i] = sum;
+        }
+        result
     }
 }
 
