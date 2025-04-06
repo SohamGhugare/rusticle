@@ -21,8 +21,7 @@ rusticle = "0.1.0"
 ### Complex Numbers
 Comprehensive support for complex arithmetic, mathematical functions, and polar form conversions
 
-
-### Example
+#### Example
 
 ```rust
 use rusticle::complex::Complex;
@@ -61,6 +60,38 @@ let norm = v1.norm();
 
 // Normalize a vector
 let normalized = v1.normalize();
+```
+
+### Matrices
+Flexible matrix operations supporting both real and complex numbers, with comprehensive linear algebra functionality
+
+```rust
+use rusticle::linalg::matrix::Matrix;
+use rusticle::complex::Complex;
+
+// Create real matrices
+let a = Matrix::new(2, 2, vec![1.0, 2.0, 3.0, 4.0]);
+let b = Matrix::new(2, 2, vec![5.0, 6.0, 7.0, 8.0]);
+
+// Matrix operations
+let sum = a.clone() + b.clone();
+let scaled = a.clone() * 2.0;
+
+// Create complex matrices
+let c = Matrix::new(2, 2, vec![
+    Complex::new(1.0, 2.0),
+    Complex::new(3.0, 4.0),
+    Complex::new(5.0, 6.0),
+    Complex::new(7.0, 8.0)
+]);
+
+// Advanced operations
+let identity = Matrix::identity(2);
+let is_unitary = c.is_unitary();
+let conjugate_transpose = c.conjugate_transpose();
+
+// Accessing elements
+let element = c.get(0, 0); // Gets element at row 0, column 0
 ```
 
 ## License
