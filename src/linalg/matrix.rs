@@ -5,7 +5,7 @@
 
 use std::ops::{Add, Sub, Mul, Neg};
 use std::fmt;
-use crate::complex::Complex;
+use crate::complex::{Complex, ComplexVector};
 
 /// A matrix that can contain either real numbers (f64) or complex numbers (Complex)
 #[derive(Clone, PartialEq)]
@@ -229,6 +229,43 @@ impl Matrix<Complex> {
         let mut result = Matrix::zeros(size, size);
         for i in 0..size {
             result.set(i, i, Complex::new(1.0, 0.0));
+        }
+        result
+    }
+
+    /// Multiplies this matrix by a vector
+    /// 
+    /// # Panics
+    /// 
+    /// Panics if the number of columns in the matrix does not match the vector dimension
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// use rusticle::complex::{Complex, ComplexVector};
+    /// 
+    /// let matrix = Matrix::new(2, 2, vec![
+    ///     Complex::new(1.0, 0.0), Complex::new(0.0, 1.0),
+    ///     Complex::new(0.0, 1.0), Complex::new(1.0, 0.0)
+    /// ]);
+    /// 
+    /// let vector = ComplexVector::new(vec![Complex::new(1.0, 0.0), Complex::new(0.0, 1.0)]);
+    /// let result = matrix.mul_vector(&vector);
+    /// 
+    /// assert_eq!(result.dimension(), 2);
+    /// assert_eq!(result.components[0], Complex::new(0.0, 0.0));
+    /// assert_eq!(result.components[1], Complex::new(0.0, 2.0));
+    /// ```
+    pub fn mul_vector(&self, vector: &ComplexVector) -> ComplexVector {
+        assert_eq!(self.cols(), vector.dimension(), "Matrix columns must match vector dimension");
+        
+        let mut result = ComplexVector::zeros(self.rows());
+        for i in 0..self.rows() {
+            let mut sum = Complex::new(0.0, 0.0);
+            for j in 0..self.cols() {
+                sum = sum + *self.get(i, j) * vector.components[j];
+            }
+            result.components[i] = sum;
         }
         result
     }
