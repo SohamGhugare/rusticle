@@ -5,5 +5,6 @@
 //! polar form conversions.
 
 pub mod complex;
+pub mod linalg;
 
 pub use complex::Angle;
