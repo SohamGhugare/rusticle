@@ -4,3 +4,5 @@
 //! linear algebra operations.
 
 pub mod matrix;
+
+pub use matrix::Matrix;
