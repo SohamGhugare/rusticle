@@ -2,6 +2,7 @@
 
 use std::ops::{Add, Sub, Mul, Div, Neg};
 use std::fmt;
+use std::str::FromStr;
 use super::angle::Angle;
 
 /// A complex number represented as a + bi
@@ -20,6 +21,13 @@ use super::angle::Angle;
 /// 
 /// // Create a complex number in polar form
 /// let z2 = Complex::from_polar(5.0, Angle::from_degrees(30.0));
+/// 
+/// // Parse a complex number from a string
+/// let z3: Complex = "2+3i".parse().unwrap();
+/// let z4: Complex = "-1.5-2.5i".parse().unwrap();
+/// let z5: Complex = "3i".parse().unwrap();
+/// let z6: Complex = "-i".parse().unwrap();
+/// let z7: Complex = "5".parse().unwrap();
 /// 
 /// // Basic arithmetic
 /// let sum = z1 + z2;
@@ -265,5 +273,94 @@ impl Div<f64> for Complex {
 impl From<f64> for Complex {
     fn from(real: f64) -> Self {
         Complex::new(real, 0.0)
+    }
+}
+
+impl FromStr for Complex {
+    type Err = String;
+
+    /// Parses a string into a Complex number
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use rusticle::complex::Complex;
+    /// 
+    /// let z1: Complex = "2+3i".parse().unwrap();
+    /// assert_eq!(z1.real, 2.0);
+    /// assert_eq!(z1.imag, 3.0);
+    /// ```
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let s = s.trim();
+        
+        // Handle empty string
+        if s.is_empty() {
+            return Err("Empty string".to_string());
+        }
+
+        // Handle pure real number
+        if !s.contains('i') {
+            let real = s.parse::<f64>().map_err(|e| format!("Invalid real part: {}", e))?;
+            return Ok(Complex::new(real, 0.0));
+        }
+
+        // Handle pure imaginary number
+        if !s.contains('+') && !s.contains('-') {
+            let imag_str = s.trim_end_matches('i');
+            let imag = if imag_str.is_empty() {
+                1.0
+            } else if imag_str == "-" {
+                -1.0
+            } else {
+                imag_str.parse::<f64>().map_err(|e| format!("Invalid imaginary part: {}", e))?
+            };
+            return Ok(Complex::new(0.0, imag));
+        }
+
+        // Split into parts
+        let mut parts = Vec::new();
+        let mut current = String::new();
+        let mut last_char = ' ';
+
+        for c in s.chars() {
+            if (c == '+' || c == '-') && last_char != 'e' && last_char != 'E' {
+                if !current.is_empty() {
+                    parts.push(current);
+                    current = String::new();
+                }
+                current.push(c);
+            } else {
+                current.push(c);
+            }
+            last_char = c;
+        }
+        if !current.is_empty() {
+            parts.push(current);
+        }
+
+        // Parse parts
+        let mut real = 0.0;
+        let mut imag = 0.0;
+
+        for part in parts {
+            if part.contains('i') {
+                let imag_str = part.trim_end_matches('i');
+                let value = if imag_str.is_empty() {
+                    1.0
+                } else if imag_str == "-" {
+                    -1.0
+                } else if imag_str == "+" {
+                    1.0
+                } else {
+                    imag_str.parse::<f64>().map_err(|e| format!("Invalid imaginary part: {}", e))?
+                };
+                imag = value;
+            } else {
+                let value = part.parse::<f64>().map_err(|e| format!("Invalid real part: {}", e))?;
+                real = value;
+            }
+        }
+
+        Ok(Complex::new(real, imag))
     }
 } 
