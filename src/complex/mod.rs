@@ -1,4 +1,4 @@
-//! Complex number library for Rust
+//! Complex number module for Rust
 //! 
 //! This module provides functionality for working with complex numbers,
 //! including basic arithmetic operations, mathematical functions, and
