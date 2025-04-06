@@ -8,7 +8,7 @@ pub mod angle;
 pub mod complex;
 pub mod vector;
 
-// Re-export the Angle, Complex, and ComplexVector types for convenience
+// Re-exports
 pub use angle::Angle;
 pub use complex::Complex;
 pub use vector::ComplexVector;

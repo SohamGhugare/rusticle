@@ -1,4 +1,7 @@
 //! Matrix and their operations
+//!
+//! This module provides a generic matrix implementation that supports both real numbers (f64)
+//! and complex numbers (Complex).
 
 use std::ops::{Add, Sub, Mul, Neg};
 use std::fmt;
@@ -27,12 +30,28 @@ impl<T> Matrix<T> {
     /// # Panics
     /// 
     /// Panics if the length of data does not match rows * cols
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// 
+    /// let matrix = Matrix::new(2, 2, vec![1.0, 2.0, 3.0, 4.0]);
+    /// assert_eq!(matrix.get(0, 1), &2.0);
+    /// ```
     pub fn new(rows: usize, cols: usize, data: Vec<T>) -> Self {
         assert_eq!(data.len(), rows * cols, "Data length must match matrix dimensions");
         Matrix { rows, cols, data }
     }
 
     /// Creates a new matrix filled with zeros
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// 
+    /// let zeros = Matrix::zeros(3, 3);
+    /// assert_eq!(zeros.get(1, 1), &0.0);
+    /// ```
     pub fn zeros(rows: usize, cols: usize) -> Self 
     where
         T: Default + Clone,
@@ -54,6 +73,14 @@ impl<T> Matrix<T> {
     /// # Returns
     /// 
     /// Reference to the element at the specified position
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// 
+    /// let matrix = Matrix::new(2, 2, vec![1.0, 2.0, 3.0, 4.0]);
+    /// assert_eq!(matrix.get(0, 1), &2.0);
+    /// ```
     pub fn get(&self, row: usize, col: usize) -> &T {
         &self.data[row * self.cols + col]
     }
@@ -65,16 +92,41 @@ impl<T> Matrix<T> {
     /// * `row` - Row index (0-based)
     /// * `col` - Column index (0-based)
     /// * `value` - New value to set
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// 
+    /// let mut matrix = Matrix::new(2, 2, vec![1.0, 2.0, 3.0, 4.0]);
+    /// matrix.set(0, 1, 5.0);
+    /// assert_eq!(matrix.get(0, 1), &5.0);
+    /// ```
     pub fn set(&mut self, row: usize, col: usize, value: T) {
         self.data[row * self.cols + col] = value;
     }
 
     /// Returns the number of rows in the matrix
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// 
+    /// let matrix = Matrix::new(2, 3, vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+    /// assert_eq!(matrix.rows(), 2);
+    /// ```
     pub fn rows(&self) -> usize {
         self.rows
     }
 
     /// Returns the number of columns in the matrix
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// 
+    /// let matrix = Matrix::new(2, 3, vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+    /// assert_eq!(matrix.cols(), 3);
+    /// ```
     pub fn cols(&self) -> usize {
         self.cols
     }
@@ -163,6 +215,16 @@ impl Mul<&Matrix<Complex>> for &Matrix<Complex> {
 // Special implementations for Complex numbers
 impl Matrix<Complex> {
     /// Creates an identity matrix of the given size
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// use rusticle::complex::Complex;
+    /// 
+    /// let identity = Matrix::identity(2);
+    /// assert_eq!(identity.get(0, 0), &Complex::new(1.0, 0.0));
+    /// assert_eq!(identity.get(1, 1), &Complex::new(1.0, 0.0));
+    /// ```
     pub fn identity(size: usize) -> Self {
         let mut result = Matrix::zeros(size, size);
         for i in 0..size {
@@ -172,6 +234,22 @@ impl Matrix<Complex> {
     }
 
     /// Computes the conjugate transpose of the matrix
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// use rusticle::complex::Complex;
+    /// 
+    /// let matrix = Matrix::new(2, 2, vec![
+    ///     Complex::new(1.0, 2.0),
+    ///     Complex::new(3.0, 4.0),
+    ///     Complex::new(5.0, 6.0),
+    ///     Complex::new(7.0, 8.0)
+    /// ]);
+    /// 
+    /// let conjugate_transpose = matrix.conjugate_transpose();
+    /// assert_eq!(conjugate_transpose.get(0, 0), &Complex::new(1.0, -2.0));
+    /// ```
     pub fn conjugate_transpose(&self) -> Self {
         let mut result = Matrix::zeros(self.cols, self.rows);
         for row in 0..self.rows {
@@ -185,6 +263,21 @@ impl Matrix<Complex> {
     /// Checks if the matrix is unitary
     /// 
     /// A matrix is unitary if its conjugate transpose is its inverse
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rusticle::linalg::Matrix;
+    /// use rusticle::complex::Complex;
+    /// 
+    /// let unitary = Matrix::new(2, 2, vec![
+    ///     Complex::new(1.0 / 2.0f64.sqrt(), 0.0),
+    ///     Complex::new(1.0 / 2.0f64.sqrt(), 0.0),
+    ///     Complex::new(1.0 / 2.0f64.sqrt(), 0.0),
+    ///     Complex::new(-1.0 / 2.0f64.sqrt(), 0.0)
+    /// ]);
+    /// 
+    /// assert!(unitary.is_unitary());
+    /// ```
     pub fn is_unitary(&self) -> bool {
         if self.rows != self.cols {
             return false;

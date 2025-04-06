@@ -5,4 +5,5 @@
 
 pub mod matrix;
 
+// Re-exports 
 pub use matrix::Matrix;
