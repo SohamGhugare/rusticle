@@ -187,6 +187,21 @@ impl Complex {
     pub fn magnitude_squared(&self) -> f64 {
         self.real * self.real + self.imag * self.imag
     }
+
+    /// Creates a complex number from a string representation
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use rusticle::complex::Complex;
+    /// 
+    /// let z1 = Complex::from_str("2+3i").unwrap();
+    /// assert_eq!(z1.real, 2.0);
+    /// assert_eq!(z1.imag, 3.0);
+    /// ```
+    pub fn from_str(s: &str) -> Result<Self, String> {
+        s.parse()
+    }
 }
 
 // Implement standard arithmetic operations
