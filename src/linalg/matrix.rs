@@ -49,7 +49,7 @@ impl<T> Matrix<T> {
     /// ```rust
     /// use rusticle::linalg::Matrix;
     /// 
-    /// let zeros = Matrix::zeros(3, 3);
+    /// let zeros: Matrix<f64> = Matrix::zeros(3, 3);
     /// assert_eq!(zeros.get(1, 1), &0.0);
     /// ```
     pub fn zeros(rows: usize, cols: usize) -> Self 
