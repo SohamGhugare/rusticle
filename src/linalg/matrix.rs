@@ -1,3 +1,5 @@
+//! Matrix and their operations
+
 use std::ops::{Add, Sub, Mul, Neg};
 use std::fmt;
 use crate::complex::Complex;
