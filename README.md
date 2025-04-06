@@ -26,11 +26,16 @@ Comprehensive support for complex arithmetic, mathematical functions, and polar 
 ```rust
 use rusticle::complex::Complex;
 
-// Create complex numbers
+// Create complex numbers in easier ways
+let z = Complex::from_str("2+3i").unwrap();
+let z0 = Complex::new(2, 3);
+
+// Basic arithmetic
 let z1 = Complex::new(3.0, 4.0);
 let z2 = Complex::from_polar(5.0, std::f64::consts::PI / 6.0);
 
-// Basic arithmetic
+
+
 let sum = z1 + z2;
 let product = z1 * z2;
 
