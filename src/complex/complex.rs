@@ -118,6 +118,23 @@ impl Complex {
         (self.real * self.real + self.imag * self.imag).sqrt()
     }
 
+    /// Returns the norm of the complex number
+    /// 
+    /// This method calculates the norm of the complex number,
+    /// which is equivalent to the magnitude of the complex number.
+    /// 
+    /// # Examples  
+    /// 
+    /// ```
+    /// use rusticle::complex::Complex;
+    /// 
+    /// let z = Complex::new(3.0, 4.0);
+    /// assert_eq!(z.norm(), 5.0);
+    /// ```
+    pub fn norm(&self) -> f64 {
+        (self.real * self.real + self.imag * self.imag).sqrt()
+    }
+
     /// Returns the argument (angle) of the complex number in radians
     /// 
     /// The argument is the angle between the positive real axis and the line
@@ -185,6 +202,23 @@ impl Complex {
     /// assert_eq!(z.magnitude_squared(), 25.0);
     /// ```
     pub fn magnitude_squared(&self) -> f64 {
+        self.real * self.real + self.imag * self.imag
+    }
+
+    /// Returns the square of the norm of the complex number
+    /// 
+    /// This method calculates the square of the norm of the complex number,
+    /// which is equivalent to the product of the complex number with its conjugate.
+    /// 
+    /// # Examples  
+    /// 
+    /// ```
+    /// use rusticle::complex::Complex;
+    /// 
+    /// let z = Complex::new(3.0, 4.0);
+    /// assert_eq!(z.norm_squared(), 25.0);
+    /// ```
+    pub fn norm_squared(&self) -> f64 {
         self.real * self.real + self.imag * self.imag
     }
 

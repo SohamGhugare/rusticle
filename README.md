@@ -12,7 +12,7 @@ OR add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rusticle = "0.1.0"
+rusticle = "0.4.11"
 ```
 
 
