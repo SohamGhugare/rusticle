@@ -236,6 +236,31 @@ impl Complex {
     pub fn from_str(s: &str) -> Result<Self, String> {
         s.parse()
     }
+
+    /// Computes the exponential of a complex number
+    /// 
+    /// This function implements Euler's formula: e^(a+bi) = e^a * (cos(b) + i*sin(b))
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use rusticle::complex::Complex;
+    /// use std::f64::consts::PI;
+    /// 
+    /// // e^(iπ/4) = (1 + i)/√2
+    /// let z = Complex::new(0.0, PI/4.0);
+    /// let result = z.exp();
+    /// let expected = 1.0 / 2.0f64.sqrt();
+    /// assert!((result.real - expected).abs() < 1e-10);
+    /// assert!((result.imag - expected).abs() < 1e-10);
+    /// ```
+    pub fn exp(&self) -> Self {
+        let exp_real = self.real.exp();
+        Complex::new(
+            exp_real * self.imag.cos(),
+            exp_real * self.imag.sin()
+        )
+    }
 }
 
 // Implement standard arithmetic operations

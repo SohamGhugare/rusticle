@@ -1,6 +1,6 @@
 [package]
 name = "rusticle"
-version = "0.4.11"
+version = "0.4.12"
 edition = "2024"
 description = "High-performance Rust library for numerical computing, built with power and simplicity."
 authors = ["Soham Ghugare <soham.ghugare@gmail.com>"]
