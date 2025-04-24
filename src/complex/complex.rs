@@ -1,6 +1,6 @@
 //! Complex numbers and their operations
 
-use std::ops::{Add, Sub, Mul, Div, Neg};
+use std::ops::{Add, Sub, Mul, Div, Neg, AddAssign, SubAssign, MulAssign, DivAssign};
 use std::fmt;
 use std::str::FromStr;
 use super::angle::Angle;
@@ -436,5 +436,58 @@ impl FromStr for Complex {
         }
 
         Ok(Complex::new(real, imag))
+    }
+}
+
+impl AddAssign for Complex {
+    /// Performs the `+=` operation.
+    fn add_assign(&mut self, other: Self) {
+        self.real += other.real;
+        self.imag += other.imag;
+    }
+}
+
+impl SubAssign for Complex {
+    /// Performs the `-=` operation.
+    fn sub_assign(&mut self, other: Self) {
+        self.real -= other.real;
+        self.imag -= other.imag;
+    }
+}
+
+impl MulAssign for Complex {
+    /// Performs the `*=` operation.
+    fn mul_assign(&mut self, other: Self) {
+        let real = self.real * other.real - self.imag * other.imag;
+        let imag = self.real * other.imag + self.imag * other.real;
+        self.real = real;
+        self.imag = imag;
+    }
+}
+
+impl DivAssign for Complex {
+    /// Performs the `/=` operation.
+    fn div_assign(&mut self, other: Self) {
+        let denominator = other.magnitude_squared();
+        let real = (self.real * other.real + self.imag * other.imag) / denominator;
+        let imag = (self.imag * other.real - self.real * other.imag) / denominator;
+        self.real = real;
+        self.imag = imag;
+    }
+}
+
+impl MulAssign<f64> for Complex {
+    /// Performs the `*=` operation with a scalar.
+    fn mul_assign(&mut self, scalar: f64) {
+        self.real *= scalar;
+        self.imag *= scalar;
+    }
+}
+
+impl DivAssign<f64> for Complex {
+    /// Performs the `/=` operation with a scalar.
+    fn div_assign(&mut self, scalar: f64) {
+        self.real /= scalar;
+        self.imag /= scalar;
     }
 } 
