@@ -233,7 +233,7 @@ impl Matrix<Complex> {
         result
     }
 
-    /// Multiplies this matrix by a vector
+    /// Multiplies this matrix by a vector in-place, modifying the matrix
     /// 
     /// # Panics
     /// 
@@ -244,30 +244,30 @@ impl Matrix<Complex> {
     /// use rusticle::linalg::Matrix;
     /// use rusticle::complex::{Complex, ComplexVector};
     /// 
-    /// let matrix = Matrix::new(2, 2, vec![
-    ///     Complex::new(1.0, 0.0), Complex::new(0.0, 1.0),
-    ///     Complex::new(0.0, 1.0), Complex::new(1.0, 0.0)
+    /// let mut matrix = Matrix::new(2, 2, vec![
+    ///     Complex::new(2.0, 0.0), Complex::new(3.0, 0.0),
+    ///     Complex::new(1.0, 0.0), Complex::new(4.0, 0.0)
     /// ]);
     /// 
-    /// let vector = ComplexVector::new(vec![Complex::new(1.0, 0.0), Complex::new(0.0, 1.0)]);
-    /// let result = matrix.mul_vector(&vector);
+    /// let vector = ComplexVector::new(vec![Complex::new(1.0, 0.0), Complex::new(2.0, 0.0)]);
+    /// matrix.mul_vector(&vector);
     /// 
-    /// assert_eq!(result.dimension(), 2);
-    /// assert_eq!(result.components[0], Complex::new(0.0, 0.0));
-    /// assert_eq!(result.components[1], Complex::new(0.0, 2.0));
+    /// assert_eq!(matrix.get(0, 0), &Complex::new(8.0, 0.0));  // 2*1 + 3*2 = 8
+    /// assert_eq!(matrix.get(1, 0), &Complex::new(9.0, 0.0));  // 1*1 + 4*2 = 9
     /// ```
-    pub fn mul_vector(&self, vector: &ComplexVector) -> ComplexVector {
+    pub fn mul_vector(&mut self, vector: &ComplexVector) {
         assert_eq!(self.cols(), vector.dimension(), "Matrix columns must match vector dimension");
         
-        let mut result = ComplexVector::zeros(self.rows());
+        let mut result = vec![Complex::new(0.0, 0.0); self.rows()];
         for i in 0..self.rows() {
-            let mut sum = Complex::new(0.0, 0.0);
             for j in 0..self.cols() {
-                sum = sum + *self.get(i, j) * vector.components[j];
+                result[i] = result[i] + *self.get(i, j) * vector.components[j];
             }
-            result.components[i] = sum;
         }
-        result
+        
+        // Update matrix dimensions and data
+        self.cols = 1;
+        self.data = result;
     }
 
     /// Computes the conjugate transpose of the matrix

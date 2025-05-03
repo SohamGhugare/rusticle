@@ -234,7 +234,7 @@ impl ComplexVector {
         ComplexVector::new(components)
     }
 
-    /// Multiplies this vector by a matrix
+    /// Multiplies this vector by a matrix in-place
     /// 
     /// # Panics
     /// 
@@ -245,29 +245,27 @@ impl ComplexVector {
     /// use rusticle::complex::{Complex, ComplexVector};
     /// use rusticle::linalg::Matrix;
     /// 
-    /// let v = ComplexVector::new(vec![Complex::new(1.0, 0.0), Complex::new(0.0, 1.0)]);
+    /// let mut v = ComplexVector::new(vec![Complex::new(1.0, 0.0), Complex::new(0.0, 1.0)]);
     /// let m = Matrix::new(2, 2, vec![
     ///     Complex::new(1.0, 0.0), Complex::new(0.0, 1.0),
     ///     Complex::new(0.0, 1.0), Complex::new(1.0, 0.0)
     /// ]);
     /// 
-    /// let result = v.mul_matrix(&m);
-    /// assert_eq!(result.dimension(), 2);
-    /// assert_eq!(result.components[0], Complex::new(0.0, 0.0));
-    /// assert_eq!(result.components[1], Complex::new(0.0, 2.0));
+    /// v.mul_matrix(&m);
+    /// assert_eq!(v.dimension(), 2);
+    /// assert_eq!(v.components[0], Complex::new(0.0, 0.0));
+    /// assert_eq!(v.components[1], Complex::new(0.0, 2.0));
     /// ```
-    pub fn mul_matrix(&self, matrix: &Matrix<Complex>) -> Self {
+    pub fn mul_matrix(&mut self, matrix: &Matrix<Complex>) {
         assert_eq!(self.dimension(), matrix.cols(), "Vector dimension must match matrix columns");
         
-        let mut result = ComplexVector::zeros(matrix.rows());
+        let mut result = vec![Complex::new(0.0, 0.0); matrix.rows()];
         for i in 0..matrix.rows() {
-            let mut sum = Complex::new(0.0, 0.0);
             for j in 0..matrix.cols() {
-                sum = sum + self.components[j] * *matrix.get(i, j);
+                result[i] = result[i] + self.components[j] * *matrix.get(i, j);
             }
-            result.components[i] = sum;
         }
-        result
+        self.components = result;
     }
 }
 
