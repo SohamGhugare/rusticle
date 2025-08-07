@@ -1,14 +1,11 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! # Rusticle - A high-performance Rust library for numerical computing
+//! 
+//! Hello, and welcome to the only Rust library you'll ever need for math.
+//! 
+//! This library provides a comprehensive set of tools for numerical computing,
+//! including support for complex numbers, linear algebra, and more.
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub mod core;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+// Global exports
+pub use core::Complex;
