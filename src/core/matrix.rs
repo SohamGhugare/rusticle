@@ -65,7 +65,7 @@ impl<T: Copy> Matrix<T> {
     /// 
     /// # Example
     /// ```
-    /// use rusticle::Matrix;
+    /// use rusticle::{Matrix, Vector};
     /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], 2, 2);
     /// let vector = Vector::new(vec![1.0, 2.0]);
     /// let result = matrix.mul_vector(&vector);
