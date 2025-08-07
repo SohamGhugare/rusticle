@@ -1,6 +1,7 @@
 use std::ops::{Add, Index, IndexMut, Mul, Sub};
 use std::fmt::{Display, Formatter, Result as FmtResult};
 
+/// A vector of elements of type `T`
 #[derive(Debug, Clone, PartialEq)]
 pub struct Vector<T> {
     pub data: Vec<T>,

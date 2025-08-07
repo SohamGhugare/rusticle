@@ -4,7 +4,9 @@
 
 pub mod complex;
 pub mod vector;
+pub mod matrix;
 
 // Global exports
 pub use complex::Complex;
 pub use vector::Vector;
+pub use matrix::Matrix;

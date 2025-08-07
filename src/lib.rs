@@ -8,4 +8,4 @@
 pub mod core;
 
 // Global exports
-pub use core::{ Complex, Vector };
+pub use core::{ Complex, Vector, Matrix };
