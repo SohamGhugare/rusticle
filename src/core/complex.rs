@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub, Mul, Div};
+use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::fmt::{Display, Formatter, Result as FmtResult};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -11,6 +11,52 @@ impl<T> Complex<T> {
     pub fn new(real: T, imag: T) -> Self {
         Self { real, imag }
     }
+
+    /// Returns the complex conjugate of this complex number.
+    /// 
+    /// The conjugate of a complex number `a + bi` is `a - bi`.
+    /// 
+    /// # Example
+    /// ```
+    /// use rusticle::Complex;
+    /// 
+    /// let z = Complex::new(3.0, 4.0);
+    /// let conj = z.conjugate();
+    /// 
+    /// assert_eq!(conj, Complex::new(3.0, -4.0));
+    /// ```
+    pub fn conjugate(self) -> Self
+    where
+        T: Neg<Output = T>,
+    {
+        Self {
+            real: self.real,
+            imag: -self.imag,
+        }
+    }
+
+    /// Returns the norm (magnitude) of this complex number.
+    /// 
+    /// The norm of a complex number `a + bi` is `√(a² + b²)`.
+    /// 
+    /// # Example
+    /// ```
+    /// use rusticle::Complex;
+    /// 
+    /// let z = Complex::new(3.0, 4.0);
+    /// let norm = z.norm();
+    /// 
+    /// assert_eq!(norm, 5.0);
+    /// ```
+    pub fn norm(&self) -> f64
+    where
+        T: Copy + Mul<Output = T> + Add<Output = T> + Into<f64>,
+    {
+        let re = self.real.into();
+        let im = self.imag.into();
+        (re * re + im * im).sqrt()
+    }
+
 }
 
 impl<T: Display + PartialEq + Default + PartialOrd> Display for Complex<T> {
@@ -114,7 +160,7 @@ impl<T: Copy + Mul<Output = T> + Sub<Output = T> + Add<Output = T> + Div<Output 
     /// 
     /// let c = a / b;
     /// 
-    /// assert_eq!(c, Complex::new(2.5, 0.5));
+    /// assert_eq!(c, Complex::new(2.5, -0.5));
     /// ```
     fn div(self, other: Self) -> Self {
         let denominator = other.real * other.real + other.imag * other.imag;
