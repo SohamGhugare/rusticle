@@ -1,7 +1,7 @@
 use std::ops::{Add, Index, IndexMut, Mul, Sub};
 use std::fmt::{Display, Formatter, Result as FmtResult};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Vector<T> {
     pub data: Vec<T>,
 }
