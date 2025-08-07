@@ -1,5 +1,6 @@
 use crate::Vector;
 use std::ops::{Add, Index, IndexMut, Mul};
+use std::fmt::{Display, Formatter, Result as FmtResult};
 
 /// A matrix of elements of type `T`
 #[derive(Debug, Clone, PartialEq)]
@@ -91,6 +92,43 @@ impl<T: Copy> Matrix<T> {
         Vector::new(result)
     }
 
+    /// Multiplies the matrix by another matrix.
+    /// 
+    /// # Example
+    /// ```
+    /// use rusticle::Matrix;
+    /// let matrix1 = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], 2, 2);
+    /// let matrix2 = Matrix::new(vec![5.0, 6.0, 7.0, 8.0], 2, 2);
+    /// let result = matrix1.mul_matrix(&matrix2);
+    /// assert_eq!(result, Matrix::new(vec![19.0, 22.0, 43.0, 50.0], 2, 2));
+    /// ```
+    #[inline(always)]
+    pub fn mul_matrix(&self, other: &Self) -> Self
+    where
+        T: Copy + Default + Add<Output = T> + Mul<Output = T>,
+    {
+        assert_eq!(self.cols, other.rows, "Matrix dimension mismatch");
+
+        let mut result = vec![T::default(); self.rows * other.cols];
+
+        for i in 0..self.rows {
+            for j in 0..other.cols {
+                let mut sum = T::default();
+                for k in 0..self.cols {
+                    sum = sum + self[(i, k)] * other[(k, j)];
+                }
+                result[i * other.cols + j] = sum;
+            }
+        }
+
+        Matrix {
+            data: result,
+            rows: self.rows,
+            cols: other.cols,
+        }
+    }
+
+
     /// Returns the number of rows in the matrix.
     /// 
     /// # Example
@@ -115,6 +153,52 @@ impl<T: Copy> Matrix<T> {
     #[inline(always)]
     pub fn cols(&self) -> usize {
         self.cols
+    }
+}
+
+impl<T> Mul<Matrix<T>> for Matrix<T>
+where
+    T: Copy + Default + Add<Output = T> + Mul<Output = T>,
+{
+    type Output = Self;
+
+    #[inline(always)]
+    fn mul(self, rhs: Self) -> Self::Output {
+        assert_eq!(self.cols, rhs.rows, "Matrix dimension mismatch");
+
+        let mut result = vec![T::default(); self.rows * rhs.cols];
+
+        for i in 0..self.rows {
+            for j in 0..rhs.cols {
+                let mut sum = T::default();
+                for k in 0..self.cols {
+                    sum = sum + self[(i, k)] * rhs[(k, j)];
+                }
+                result[i * rhs.cols + j] = sum;
+            }
+        }
+
+        Matrix {
+            data: result,
+            rows: self.rows,
+            cols: rhs.cols,
+        }
+    }
+}
+
+impl<T: Display + Copy> Display for Matrix<T> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+        for i in 0..self.rows() {
+            write!(f, "[")?;
+            for j in 0..self.cols() {
+                write!(f, "{}", self[(i, j)])?;
+                if j != self.cols() - 1 {
+                    write!(f, " ")?;
+                }
+            }
+            writeln!(f, "]")?;
+        }
+        Ok(())
     }
 }
 
