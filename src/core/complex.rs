@@ -1,4 +1,5 @@
 use std::ops::{Add, Sub, Mul, Div};
+use std::fmt::{Display, Formatter, Result as FmtResult};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Complex<T> {
@@ -11,6 +12,21 @@ impl<T> Complex<T> {
         Self { real, imag }
     }
 }
+
+impl<T: Display + PartialEq + Default + PartialOrd> Display for Complex<T> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+        let zero = T::default();
+
+        match (self.real == zero, self.imag == zero) {
+            (true, true) => write!(f, "0"),
+            (false, true) => write!(f, "{}", self.real),
+            (true, false) => write!(f, "{}i", self.imag),
+            (false, false) if self.imag < zero => write!(f, "{}{}i", self.real, self.imag),
+            (false, false) => write!(f, "{}+{}i", self.real, self.imag),
+        }
+    }
+}
+
 
 impl<T: Copy + Add<Output = T>> Add for Complex<T> {
     type Output = Self;
