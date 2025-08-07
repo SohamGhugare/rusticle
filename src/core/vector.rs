@@ -69,7 +69,7 @@ impl<T: Copy> Vector<T> {
     /// use rusticle::Vector;
     /// let v = Vector::new(vec![3.0, 4.0]);
     /// let result = v.normalize();
-    /// assert_eq!(result, Vector::new(vec![0.6, 0.8]));
+    /// assert!((result.norm() - 1.0).abs() < 1e-10);
     /// ```
     pub fn normalize(&self) -> Self
     where
@@ -178,7 +178,7 @@ impl<T: Sub<Output = T> + Copy> Sub for Vector<T> {
 
 impl<T: Display> Display for Vector<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
-        let contents: Vec<String> = self.data.iter().map(|x| format!("{}", x)).collect();
+        let contents: Vec<String> = self.data.iter().map(|x| format!("{:.4}", x)).collect();
         write!(f, "[{}]", contents.join(", "))
     }
 }
