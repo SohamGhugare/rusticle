@@ -1,6 +1,7 @@
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::fmt::{Display, Formatter, Result as FmtResult};
 
+/// A complex number `a + bi`
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Complex<T> {
     pub real: T,
