@@ -1,5 +1,6 @@
+use crate::core::Conjugatable;
 use crate::Vector;
-use std::ops::{Add, Index, IndexMut, Mul};
+use std::ops::{Add, Index, IndexMut, Mul, Sub};
 use std::fmt::{Display, Formatter, Result as FmtResult};
 
 /// A matrix of elements of type `T`
@@ -126,6 +127,85 @@ impl<T: Copy> Matrix<T> {
             rows: self.rows,
             cols: other.cols,
         }
+    }
+
+    /// Returns the transpose of the matrix.
+    /// 
+    /// # Example
+    /// ```
+    /// use rusticle::Matrix;
+    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], 2, 2);
+    /// let transposed = matrix.transpose();
+    /// assert_eq!(transposed, Matrix::new(vec![1.0, 3.0, 2.0, 4.0], 2, 2));
+    /// ```
+    #[inline(always)]
+    pub fn transpose(&self) -> Self {
+        let mut data = Vec::with_capacity(self.data.len());
+        unsafe {
+            data.set_len(self.data.len());
+            for j in 0..self.cols {
+                for i in 0..self.rows {
+                    *data.get_unchecked_mut(j * self.rows + i) = *self.data.get_unchecked(i * self.cols + j);
+                }
+            }
+        }
+        Self {
+            data,
+            rows: self.cols,
+            cols: self.rows,
+        }
+    }
+
+    /// Returns the Hermitian conjugate (conjugate transpose) of the matrix.
+    /// 
+    /// # Example
+    /// ```
+    /// use rusticle::{Complex, Matrix};
+    /// 
+    /// let complex_matrix = Matrix::new(vec![Complex::new(1.0, 2.0), Complex::new(3.0, 4.0)], 1, 2);
+    /// let hermitian_complex = complex_matrix.dagger();
+    /// assert_eq!(hermitian_complex, Matrix::new(vec![Complex::new(1.0, -2.0), Complex::new(3.0, -4.0)], 2, 1));
+    /// ```
+    #[inline(always)]
+    pub fn dagger(&self) -> Self
+    where
+        T: Conjugatable,
+    {
+        let mut data = Vec::with_capacity(self.data.len());
+        unsafe {
+            data.set_len(self.data.len());
+            for j in 0..self.cols {
+                for i in 0..self.rows {
+                    *data.get_unchecked_mut(j * self.rows + i) = 
+                        self.data.get_unchecked(i * self.cols + j).conjugate();
+                }
+            }
+        }
+        Self {
+            data,
+            rows: self.cols,
+            cols: self.rows,
+        }
+    }
+
+    pub fn is_unitary(&self) -> bool
+    where
+        T: Copy + Default + Add<Output = T> + Mul<Output = T> + Conjugatable + Into<f64> + Sub<Output = T> + From<u8>,
+    {
+        if self.rows != self.cols { return false; }
+
+        let identity = Matrix::identity(self.rows);
+        let dagger = self.dagger();
+        let product = self.mul_matrix(&dagger);
+
+        // Check if product is close to identity
+        for i in 0..self.rows * self.cols {
+            let diff: f64 = unsafe { 
+                (*product.data.get_unchecked(i) - *identity.data.get_unchecked(i)).into()
+            };
+            if diff.abs() > 1e-10 { return false; }
+        }
+        true
     }
 
 
