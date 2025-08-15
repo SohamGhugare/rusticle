@@ -15,7 +15,8 @@ pub trait Conjugatable {
     /// 
     /// # Example
     /// ```
-    /// use rusticle::Conjugatable;
+    /// use rusticle::Complex;
+    /// use rusticle::core::Conjugatable;
     /// let a = Complex::new(1.0, 2.0);
     /// let b = a.conjugate();
     /// assert_eq!(b, Complex::new(1.0, -2.0));
