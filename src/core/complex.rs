@@ -60,6 +60,28 @@ impl<T> Complex<T> {
         (re * re + im * im).sqrt()
     }
 
+    /// Returns the squared norm of this complex number.
+    /// 
+    /// The squared norm of a complex number `a + bi` is `a² + b²`.
+    /// 
+    /// # Example
+    /// ```
+    /// use rusticle::Complex;
+    /// 
+    /// let z = Complex::new(3.0, 4.0);
+    /// let norm_squared = z.norm_squared();
+    /// 
+    /// assert_eq!(norm_squared, 25.0);
+    /// ```
+    pub fn norm_squared(&self) -> f64
+    where
+        T: Copy + Mul<Output = T> + Add<Output = T> + Into<f64>,
+    {
+        let re = self.real.into();
+        let im = self.imag.into();
+        re * re + im * im
+    }
+
 }
 
 impl<T: Neg<Output = T>> Conjugatable for Complex<T> {
