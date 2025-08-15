@@ -188,6 +188,15 @@ impl<T: Copy> Matrix<T> {
         }
     }
 
+    /// Checks if the matrix is unitary.
+    /// 
+    /// # Example
+    /// ```
+    /// use rusticle::Matrix;
+    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], 2, 2);
+    /// assert_eq!(matrix.is_unitary(), false);
+    /// ```
+    #[inline(always)]
     pub fn is_unitary(&self) -> bool
     where
         T: Copy + Default + Add<Output = T> + Mul<Output = T> + Conjugatable + Into<f64> + Sub<Output = T> + From<u8>,
@@ -206,6 +215,47 @@ impl<T: Copy> Matrix<T> {
             if diff.abs() > 1e-10 { return false; }
         }
         true
+    }
+
+    /// Kronecker product (tensor product) of two matrices.
+    /// Essential for multi-qubit operations.
+    /// 
+    /// # Example
+    /// ```
+    /// use rusticle::Matrix;
+    /// let a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], 2, 2);
+    /// let b = Matrix::new(vec![5.0, 6.0, 7.0, 8.0], 2, 2);
+    /// let kron = a.kron(&b);
+    /// assert_eq!(kron, Matrix::new(vec![5.0, 6.0, 10.0, 12.0, 7.0, 8.0, 14.0, 16.0, 15.0, 18.0, 20.0, 24.0, 21.0, 24.0, 28.0, 32.0], 4, 4));
+    /// ```
+    #[inline(always)]
+    pub fn kron(&self, other: &Self) -> Self
+    where
+        T: Mul<Output = T>,
+    {
+        let new_rows = self.rows * other.rows;
+        let new_cols = self.cols * other.cols;
+        let mut data = Vec::with_capacity(new_rows * new_cols);
+        
+        unsafe {
+            data.set_len(new_rows * new_cols);
+            
+            for i in 0..self.rows {
+                for j in 0..self.cols {
+                    let a_elem = *self.data.get_unchecked(i * self.cols + j);
+                    for k in 0..other.rows {
+                        for l in 0..other.cols {
+                            let b_elem = *other.data.get_unchecked(k * other.cols + l);
+                            let row = i * other.rows + k;
+                            let col = j * other.cols + l;
+                            *data.get_unchecked_mut(row * new_cols + col) = a_elem * b_elem;
+                        }
+                    }
+                }
+            }
+        }
+        
+        Self::new(data, new_rows, new_cols)
     }
 
 
