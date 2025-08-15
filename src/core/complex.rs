@@ -1,6 +1,8 @@
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::fmt::{Display, Formatter, Result as FmtResult};
 
+use crate::core::Conjugatable;
+
 /// A complex number `a + bi`
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Complex<T> {
@@ -58,6 +60,16 @@ impl<T> Complex<T> {
         (re * re + im * im).sqrt()
     }
 
+}
+
+impl<T: Neg<Output = T>> Conjugatable for Complex<T> {
+    #[inline(always)]
+    fn conjugate(self) -> Self {
+        Self {
+            real: self.real,
+            imag: -self.imag,
+        }
+    }
 }
 
 impl<T: Display + PartialEq + Default + PartialOrd> Display for Complex<T> {
