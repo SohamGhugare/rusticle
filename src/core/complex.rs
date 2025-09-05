@@ -84,6 +84,15 @@ impl<T> Complex<T> {
 
 }
 
+impl<T: Default> Default for Complex<T> {
+    fn default() -> Self {
+        Self {
+            real: T::default(),
+            imag: T::default(),
+        }
+    }
+}
+
 impl<T: Neg<Output = T>> Conjugatable for Complex<T> {
     #[inline(always)]
     fn conjugate(self) -> Self {
