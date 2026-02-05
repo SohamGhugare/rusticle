@@ -93,12 +93,20 @@ impl Div for Complex {
 
 impl Display for Complex {
     fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
-        match (self.real == 0.0, self.imag == 0.0) {
-            (true, true) => write!(f, "0"),
-            (true, false) => write!(f, "{}i", self.imag),
-            (false, true) => write!(f, "{}", self.real),
-            (false, false) if self.imag < 0.0 => write!(f, "{}{}i", self.real, self.imag),
-            (false, false) => write!(f, "{}+{}i", self.real, self.imag)
+        match (self.real == 0.0, self.imag == 0.0, f.precision()) {
+            (true, true, _) => write!(f, "0"),
+            (true, false, Some(p)) => write!(f, "{:.prec$}i", self.imag, prec = p),
+            (true, false, None) => write!(f, "{}i", self.imag),
+            (false, true, Some(p)) => write!(f, "{:.prec$}", self.real, prec = p),
+            (false, true, None) => write!(f, "{}", self.real),
+            (false, false, Some(p)) if self.imag < 0.0 => {
+                write!(f, "{:.prec$}{:.prec$}i", self.real, self.imag, prec = p)
+            }
+            (false, false, Some(p)) => {
+                write!(f, "{:.prec$}+{:.prec$}i", self.real, self.imag, prec = p)
+            }
+            (false, false, None) if self.imag < 0.0 => write!(f, "{}{}i", self.real, self.imag),
+            (false, false, None) => write!(f, "{}+{}i", self.real, self.imag),
         }
     }
 }
