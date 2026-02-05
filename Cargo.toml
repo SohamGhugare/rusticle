@@ -1,6 +1,13 @@
 [package]
 name = "rusticle"
-version = "0.1.0"
+version = "2.0.0"
 edition = "2024"
+description = "High-performance Rust library for numerical computing."
+authors = ["Soham Ghugare <soham.ghugare@gmail.com>"]
+keywords = ["complex-numbers", "math", "rust"]
+categories = ["mathematics"]
+license = "Apache-2.0"
+repository = "https://github.com/SohamGhugare/rusticle"
+readme = "README.md"
 
 [dependencies]
