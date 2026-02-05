@@ -1,4 +1,5 @@
-use std::ops::{Add, Div, Mul, Sub};
+use std::{fmt::{Formatter, Result as FmtResult}, ops::{Add, Div, Mul, Sub}};
+use std::fmt::{Display};
 
 /// Complex numbers representation
 #[derive(Copy, Clone, Debug, Default)]
@@ -86,6 +87,18 @@ impl Div for Complex {
         Complex {
             real: (self.real * rhs.real + self.imag * rhs.imag) / denom,
             imag: (self.imag * rhs.real - self.real * rhs.imag) / denom
+        }
+    }
+}
+
+impl Display for Complex {
+    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+        match (self.real == 0.0, self.imag == 0.0) {
+            (true, true) => write!(f, "0"),
+            (true, false) => write!(f, "{}i", self.imag),
+            (false, true) => write!(f, "{}", self.real),
+            (false, false) if self.imag < 0.0 => write!(f, "{}{}i", self.real, self.imag),
+            (false, false) => write!(f, "{}+{}i", self.real, self.imag)
         }
     }
 }
