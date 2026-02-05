@@ -4,3 +4,6 @@
 //! including support for complex numbers, linear algebra and more.
 //! 
 pub mod core;
+
+// Global re-exports
+pub use core::Complex;
